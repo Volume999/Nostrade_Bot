@@ -1,47 +1,13 @@
 import telebot
 import yaml
-
-COMMAND_WIDTH = 1
-COMMANDS = ["Today's Forecast",
-            "Week Forecast",
-            "Year Forecast",
-            "Options"]
-
-OPTIONS_WIDTH = 1
-OPTIONS = [
-    "Settings",
-    "Subscribe",
-    "About"
-]
-
-FORECAST_RECIPIENT_WIDTH = 1
-FORECAST_RECIPIENTS = [
-    "Your sign",
-    "Other sign"
-]
-
-ZODIAC_SIGNS_WIDTH = 3
-ZODIAC_SIGNS = [
-    'Aries',
-    'Taurus',
-    'Gemini',
-    'Cancer',
-    'Leo',
-    'Virgo',
-    'Libra',
-    'Scorpio',
-    'Sagittarius',
-    'Capricorn',
-    'Aquarius',
-    'Pisces'
-]
+from settings import *
 
 with open('config.yaml') as f:
-    settings = yaml.load(f, Loader=yaml.loader.SafeLoader)
+    config = yaml.load(f, Loader=yaml.loader.SafeLoader)
 
 mode = None
 
-bot = telebot.TeleBot(settings['bot_api_key'])
+bot = telebot.TeleBot(config['bot_api_key'])
 
 
 # React to /start
@@ -77,6 +43,11 @@ def show_forecast_or_select_recipient(call):
 @bot.callback_query_handler(func=lambda call: call.data in ZODIAC_SIGNS)
 def show_forecast_for_sign(call):
     bot.send_message(call.message.chat.id, f"Showing forecast for {call.data}")
+
+
+@bot.callback_query_handler(func=lambda call: call.data in OPTIONS)
+def show_forecast_for_sign(call):
+    bot.send_message(call.message.chat.id, f"Showing Option {call.data}")
 
 
 def select_recipient(message, forecast_mode):
