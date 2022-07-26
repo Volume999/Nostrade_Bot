@@ -32,3 +32,9 @@ ZODIAC_SIGNS = [
     'Aquarius',
     'Pisces'
 ]
+
+SETTINGS_WIDTH = 1
+SETTINGS = [
+    'Set your Sign',
+    'Set Language'
+]
