@@ -11,7 +11,7 @@ with open('config.yaml') as f:
 mode = None
 prev_chosen_sign = None
 user_sign = None
-user_date_of_birth: datetime = None
+user_date_of_birth: datetime = datetime(2017, 2, 3, 8, 0, 0)
 
 bot = telebot.TeleBot(config['bot_api_key'])
 
@@ -54,7 +54,7 @@ def show_forecast(call):
     global prev_chosen_sign
     print(f"Showing forecast for {call.data}")
     prev_chosen_sign = call.data
-    scrp = AstroWorldScraper(datetime(2017, 2, 3, 8, 0, 0))
+    scrp = AstroWorldScraper(user_date_of_birth)
     match mode:
         case "Month":
             forecast = scrp.monthly_forecast(8, 2022)
