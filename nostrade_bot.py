@@ -4,16 +4,20 @@ from settings import *
 from horoscope_forecast_scraper import AstroWorldScraper
 from datetime import datetime
 from Library import get_zodiac_sign_by_birth_date
+import os
 
-with open('config.yaml') as f:
-    config = yaml.load(f, Loader=yaml.loader.SafeLoader)
+# with open('config.yaml') as f:
+#     config = yaml.load(f, Loader=yaml.loader.SafeLoader)
+# bot_api_key = config['bot_api_key']
+
+bot_api_key = os.environ['bot_api_key']
 
 mode = None
 prev_chosen_sign = None
 user_sign = None
 user_date_of_birth: datetime = datetime(2017, 2, 3, 8, 0, 0)
 
-bot = telebot.TeleBot(config['bot_api_key'])
+bot = telebot.TeleBot(bot_api_key)
 
 
 # React to /start
