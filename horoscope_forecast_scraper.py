@@ -1,5 +1,6 @@
 from datetime import datetime
 import requests
+from bs4 import BeautifulSoup
 
 
 class HoroscopeScraper:
@@ -23,8 +24,31 @@ class AstroWorldScraper(HoroscopeScraper):
             "cityCode": 12278
         }
         req = requests.post(url=url, data=payload)
-        print(req.text)
+        soup = BeautifulSoup(req.text, features='html.parser')
+        soup = soup.find("div", {"class": "osn"})
+        # print(soup)
+        soup = filter(lambda item: len(list(item.attrs)) == 0, soup.find_all('p'))
+        # print(list(soup)[1])
+        # print(list(soup))
+        res = []
+        for forecast in soup:
+            # print(forecast)
+            title = forecast.find('strong')
+            text = forecast.text
+            message = ""
+
+            if title is not None:
+                message += f"{title.text}"
+
+            if text is not None:
+                message += f"\n{text.replace(title.text, '') if title is not None else text}\n"
+
+            if message.strip() != '':
+                res.append(message)
+
+        return res
+        # print(soup.prettify())
 
 
-scrp = AstroWorldScraper(datetime(2022, 2, 2, 8, 0, 0))
+scrp = AstroWorldScraper(datetime(2017, 2, 3, 8, 0, 0))
 scrp.monthly_forecast(8, 2022)

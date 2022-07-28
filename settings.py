@@ -1,6 +1,7 @@
 COMMAND_WIDTH = 1
 COMMANDS = ["Today's Forecast",
-            "Week Forecast",
+            "Tomorrow's Forecast",
+            "Month Forecast",
             "Year Forecast",
             "Options"]
 
@@ -13,6 +14,7 @@ OPTIONS = [
 
 FORECAST_RECIPIENT_WIDTH = 1
 FORECAST_RECIPIENTS = [
+    "User date of birth",
     "Your sign",
     "Other sign"
 ]
@@ -36,5 +38,6 @@ ZODIAC_SIGNS = [
 SETTINGS_WIDTH = 1
 SETTINGS = [
     'Set your Sign',
-    'Set Language'
+    'Set Language',
+    'Set your Birth Date'
 ]
