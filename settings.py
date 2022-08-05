@@ -35,6 +35,21 @@ ZODIAC_SIGNS = [
     'Pisces'
 ]
 
+ZODIAC_SIGNS_TRANSLATED = {
+    'Aries': 'oven',
+    'Taurus': 'telec',
+    'Gemini': 'bliznecy',
+    'Cancer': 'rak',
+    'Leo': 'lev',
+    'Virgo': 'deva',
+    'Libra': 'vesy',
+    'Scorpio': 'skorpion',
+    'Sagittarius': 'strelec',
+    'Capricorn': 'koserog',
+    'Aquarius': 'vodoley',
+    'Pisces': 'ryby'
+}
+
 SETTINGS_WIDTH = 1
 SETTINGS = [
     'Set your Sign',

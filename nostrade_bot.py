@@ -15,7 +15,7 @@ bot_api_key = os.environ['bot_api_key']
 mode = None
 prev_chosen_sign = None
 user_sign = None
-user_date_of_birth: datetime = datetime(2017, 2, 3, 8, 0, 0)
+user_date_of_birth: datetime = None
 
 bot = telebot.TeleBot(bot_api_key)
 
@@ -65,6 +65,16 @@ def show_forecast(call):
             print(forecast)
             for paragraph in forecast:
                 bot.send_message(call.message.chat.id, paragraph)
+        case "Year":
+            forecast = scrp.yearly_forecast(call.data)
+            print("Yearly Forecast for", call.data)
+            for paragraph in forecast:
+                bot.send_message(call.message.chat.id, paragraph)
+        case "Today":
+            forecast = scrp.yearly_forecast(call.data)
+            print("Today Forecast for", call.data)
+            for paragraph in forecast:
+                bot.send_message(call.message.chat.id, paragraph)
         case _:
             bot.send_message(call.message.chat.id, "Invalid Mode")
 
@@ -100,19 +110,36 @@ def select_option(call):
 def select_recipient(message, forecast_mode):
     global mode
     mode = forecast_mode
-    markup = telebot.types.InlineKeyboardMarkup(row_width=FORECAST_RECIPIENT_WIDTH)
-    if user_date_of_birth is not None:
-        markup.add(telebot.types.InlineKeyboardButton(f"Date of birth - {user_date_of_birth.strftime('%d-%m-%Y')}",
-                                                      callback_data="User date of birth"))
-    else:
-        markup.add(telebot.types.InlineKeyboardButton("Set date of birth", callback_data="Set your Birth Date"))
-    if prev_chosen_sign is not None:
-        markup.add(telebot.types.InlineKeyboardButton(prev_chosen_sign, callback_data=prev_chosen_sign))
-    if user_sign is not None:
-        markup.add(telebot.types.InlineKeyboardButton(f'Your sign - {user_sign}', callback_data=user_sign))
-    markup.add(telebot.types.InlineKeyboardButton("Other sign", callback_data="Other sign"))
-    bot.send_message(message.chat.id, "Which sign do you want a forecast for?", reply_markup=markup)
-
+    match mode:
+        case "Month":
+            markup = telebot.types.InlineKeyboardMarkup(row_width=FORECAST_RECIPIENT_WIDTH)
+            if user_date_of_birth is not None:
+                markup.add(telebot.types.InlineKeyboardButton(f"Date of birth - {user_date_of_birth.strftime('%d-%m-%Y')}",
+                                                              callback_data="User date of birth"))
+            else:
+                markup.add(telebot.types.InlineKeyboardButton("Set date of birth", callback_data="Set your Birth Date"))
+            if prev_chosen_sign is not None:
+                markup.add(telebot.types.InlineKeyboardButton(prev_chosen_sign, callback_data=prev_chosen_sign))
+            if user_sign is not None:
+                markup.add(telebot.types.InlineKeyboardButton(f'Your sign - {user_sign}', callback_data=user_sign))
+            markup.add(telebot.types.InlineKeyboardButton("Other sign", callback_data="Other sign"))
+            bot.send_message(message.chat.id, "Which sign do you want a forecast for?", reply_markup=markup)
+        case "Year":
+            markup = telebot.types.InlineKeyboardMarkup(row_width=FORECAST_RECIPIENT_WIDTH)
+            if prev_chosen_sign is not None:
+                markup.add(telebot.types.InlineKeyboardButton(prev_chosen_sign, callback_data=prev_chosen_sign))
+            if user_sign is not None:
+                markup.add(telebot.types.InlineKeyboardButton(f'Your sign - {user_sign}', callback_data=user_sign))
+            markup.add(telebot.types.InlineKeyboardButton("Other sign", callback_data="Other sign"))
+            bot.send_message(message.chat.id, "Which sign do you want a forecast for?", reply_markup=markup)
+        case "Today":
+            markup = telebot.types.InlineKeyboardMarkup(row_width=FORECAST_RECIPIENT_WIDTH)
+            if prev_chosen_sign is not None:
+                markup.add(telebot.types.InlineKeyboardButton(prev_chosen_sign, callback_data=prev_chosen_sign))
+            if user_sign is not None:
+                markup.add(telebot.types.InlineKeyboardButton(f'Your sign - {user_sign}', callback_data=user_sign))
+            markup.add(telebot.types.InlineKeyboardButton("Other sign", callback_data="Other sign"))
+            bot.send_message(message.chat.id, "Which sign do you want a forecast for?", reply_markup=markup)
 
 @bot.message_handler(regexp=r'\d\d/\d\d/\d\d\d\d \d\d:\d\d')
 def set_user_birth_date(message):
@@ -142,4 +169,4 @@ def handle_messages(message):
     print(message.text, "selected")
 
 
-bot.polling()
+bot.polling(non_stop=True, interval=0)
